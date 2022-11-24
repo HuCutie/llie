@@ -1,5 +1,4 @@
 .vscode/
 __pycache__/
-/dataset/Huawei
-/dataset/Nikon
+/dataset
 /EXP
