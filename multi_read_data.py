@@ -27,7 +27,7 @@ class MemoryFriendlyLoader(torch.utils.data.Dataset):
 
         transform_list = []
         transform_list += [transforms.ToTensor()]
-        # transform_list += [transforms.Resize([540, 960])]
+        transform_list += [transforms.Resize([1024, 1024])]
         self.transform = transforms.Compose(transform_list)
 
     def load_images_transform(self, file):

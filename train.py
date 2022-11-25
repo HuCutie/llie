@@ -17,6 +17,9 @@ from model import *
 from multi_read_data import MemoryFriendlyLoader
 
 
+device_ids = [0, 1, 2, 3]
+
+
 parser = argparse.ArgumentParser("SCI")
 parser.add_argument('--batch_size', type=int, default=1, help='batch size')
 parser.add_argument('--cuda', default=True, type=bool, help='Use CUDA to train model')
@@ -80,7 +83,7 @@ def main():
 
 
     model = Network(stage=args.stage)
-
+    
     model.enhance.in_conv.apply(model.weights_init)
     model.enhance.conv.apply(model.weights_init)
     model.enhance.out_conv.apply(model.weights_init)
@@ -95,11 +98,11 @@ def main():
     print(MB)
 
 
-    train_low_data_names = './dataset/Huawei/low'
+    train_low_data_names = './dataset/Sony'
     TrainDataset = MemoryFriendlyLoader(img_dir=train_low_data_names, task='train')
 
 
-    test_low_data_names = './dataset/Nikon/low'
+    test_low_data_names = './dataset/Sonytest'
     TestDataset = MemoryFriendlyLoader(img_dir=test_low_data_names, task='test')
 
     train_queue = torch.utils.data.DataLoader(
@@ -139,7 +142,7 @@ def main():
             with torch.no_grad():
                 for _, (input, image_name) in enumerate(test_queue):
                     input = Variable(input).cuda()
-                    image_name = image_name[0].split('\\')[-1].split('.')[0]
+                    image_name = image_name[0].split('.')[0]
                     illu_list, ref_list, input_list, atten= model(input)
                     u_name = '%s.png' % (image_name + '_' + str(epoch))
                     u_path = image_path + '/' + u_name

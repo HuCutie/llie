@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import cv2
 import imageio
 
-raw_filename = './data/finetune/00001_00_0.1s.ARW'
+raw_filename = './dataset/test/00212_00_10s.ARW'
 
 
 with rawpy.imread(raw_filename) as raw:
