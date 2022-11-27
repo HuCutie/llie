@@ -27,15 +27,17 @@ class MemoryFriendlyLoader(torch.utils.data.Dataset):
 
         transform_list = []
         transform_list += [transforms.ToTensor()]
-        transform_list += [transforms.Resize([1024, 1024])]
+        # transform_list += [transforms.Resize([1024, 1024])]
         self.transform = transforms.Compose(transform_list)
 
     def load_images_transform(self, file):
-        # im = Image.open(file).convert('RGB')
-        im = rawpy.imread(file)
-        rgb = im.postprocess(no_auto_bright=True,
-                             use_auto_wb=True, use_camera_wb=True)
-        img_norm = self.transform(rgb).numpy()
+        im = Image.open(file).convert('RGB')
+        # im = rawpy.imread(file)
+        # rgb = im.postprocess(no_auto_bright=True,
+        #                      use_auto_wb=True, use_camera_wb=True)
+        # im.close()
+        
+        img_norm = self.transform(im).numpy()
         img_norm = np.transpose(img_norm, (1, 2, 0))
         return img_norm
 

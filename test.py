@@ -1,5 +1,6 @@
 import os
 import sys
+import imageio
 import numpy as np
 import torch
 import argparse
@@ -15,7 +16,7 @@ parser = argparse.ArgumentParser("SCI")
 parser.add_argument('--data_path', type=str, default='./dataset/test',
                     help='location of the data corpus')
 parser.add_argument('--save_path', type=str, default='./results/medium', help='location of the data corpus')
-parser.add_argument('--model', type=str, default='./weights/medium.pt', help='location of the data corpus')
+parser.add_argument('--model', type=str, default='weights_1.pt', help='location of the data corpus')
 parser.add_argument('--gpu', type=int, default=0, help='gpu device id')
 parser.add_argument('--seed', type=int, default=2, help='random seed')
 
@@ -35,6 +36,7 @@ def save_images(tensor, path):
     image_numpy = (np.transpose(image_numpy, (1, 2, 0)))
     im = Image.fromarray(np.clip(image_numpy * 255.0, 0, 255.0).astype('uint8'))
     im.save(path, 'png')
+    # imageio.imsave('default.jpg', im)
 
 
 def main():

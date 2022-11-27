@@ -98,11 +98,11 @@ def main():
     print(MB)
 
 
-    train_low_data_names = './dataset/Sony'
+    train_low_data_names = './dataset/RAW'
     TrainDataset = MemoryFriendlyLoader(img_dir=train_low_data_names, task='train')
 
 
-    test_low_data_names = './dataset/Sonytest'
+    test_low_data_names = './dataset/RAWTEST'
     TestDataset = MemoryFriendlyLoader(img_dir=test_low_data_names, task='test')
 
     train_queue = torch.utils.data.DataLoader(
