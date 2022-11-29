@@ -21,7 +21,7 @@ device_ids = [0, 1, 2, 3]
 
 
 parser = argparse.ArgumentParser("SCI")
-parser.add_argument('--batch_size', type=int, default=1, help='batch size')
+parser.add_argument('--batch_size', type=int, default=2, help='batch size')
 parser.add_argument('--cuda', default=True, type=bool, help='Use CUDA to train model')
 parser.add_argument('--gpu', type=str, default='0', help='gpu device id')
 parser.add_argument('--seed', type=int, default=2, help='random seed')
@@ -142,7 +142,7 @@ def main():
             with torch.no_grad():
                 for _, (input, image_name) in enumerate(test_queue):
                     input = Variable(input).cuda()
-                    image_name = image_name[0].split('.')[0]
+                    image_name = image_name[0].split('/')[-1].split('.')[0]
                     illu_list, ref_list, input_list, atten= model(input)
                     u_name = '%s.png' % (image_name + '_' + str(epoch))
                     u_path = image_path + '/' + u_name

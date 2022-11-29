@@ -15,8 +15,8 @@ from multi_read_data import MemoryFriendlyLoader
 parser = argparse.ArgumentParser("SCI")
 parser.add_argument('--data_path', type=str, default='./dataset/test',
                     help='location of the data corpus')
-parser.add_argument('--save_path', type=str, default='./results/medium', help='location of the data corpus')
-parser.add_argument('--model', type=str, default='weights_1.pt', help='location of the data corpus')
+parser.add_argument('--save_path', type=str, default='./results', help='location of the data corpus')
+parser.add_argument('--model', type=str, default='./weights/weights_last.pt', help='location of the data corpus')
 parser.add_argument('--gpu', type=int, default=0, help='gpu device id')
 parser.add_argument('--seed', type=int, default=2, help='random seed')
 

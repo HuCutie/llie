@@ -10,7 +10,7 @@ class LossFunction(nn.Module):
     def forward(self, input, illu):
         Fidelity_Loss = self.l2_loss(illu, input)
         Smooth_Loss = self.smooth_loss(input, illu)
-        return 1.5*Fidelity_Loss + Smooth_Loss
+        return 2.5*Fidelity_Loss + Smooth_Loss
 
 
 
