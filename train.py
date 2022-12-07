@@ -12,6 +12,7 @@ import torch.utils
 import torch.backends.cudnn as cudnn
 import torch.nn as nn
 from torch.autograd import Variable
+from tqdm import tqdm
 
 from model import *
 from multi_read_data import MemoryFriendlyLoader
@@ -98,7 +99,7 @@ def main():
     print(MB)
 
 
-    train_low_data_names = './dataset/RAW'
+    train_low_data_names = './dataset/RAWTEST'
     TrainDataset = MemoryFriendlyLoader(img_dir=train_low_data_names, task='train')
 
 
@@ -118,7 +119,8 @@ def main():
     for epoch in range(args.epochs):
         model.train()
         losses = []
-        for batch_idx, (input, _) in enumerate(train_queue):
+        loop = tqdm(enumerate(train_queue), total =len(train_queue))
+        for batch_idx, (input, _) in loop:
             total_step += 1
             input = Variable(input, requires_grad=False).cuda()
 
@@ -129,24 +131,29 @@ def main():
             optimizer.step()
 
             losses.append(loss.item())
-            logging.info('train-epoch %03d %03d %f', epoch, batch_idx, loss)
 
+            loop.set_description(f'Epoch [{epoch}/{args.epochs}] Train')
+            loop.set_postfix(loss = np.average(losses))
 
+            # logging.info('train-epoch %03d %03d %f', epoch, batch_idx, loss)
 
-        logging.info('train-epoch %03d %f', epoch, np.average(losses))
+        # logging.info('Train average loss %f',np.average(losses))
         utils.save(model, os.path.join(model_path, 'weights_%d.pt' % epoch))
 
         if epoch % 1 == 0 and total_step != 0:
-            logging.info('train %03d %f', epoch, loss)
+            # logging.info('train %03d %f', epoch, loss)
             model.eval()
             with torch.no_grad():
-                for _, (input, image_name) in enumerate(test_queue):
+                loop = tqdm(enumerate(test_queue), total =len(test_queue))
+                for _, (input, image_name) in loop:
                     input = Variable(input).cuda()
                     image_name = image_name[0].split('/')[-1].split('.')[0]
                     illu_list, ref_list, input_list, atten= model(input)
                     u_name = '%s.png' % (image_name + '_' + str(epoch))
                     u_path = image_path + '/' + u_name
                     save_images(ref_list[0], u_path)
+
+                    loop.set_description(f'Epoch [{epoch}/{args.epochs}] Test ')
 
 if __name__ == '__main__':
     main()
