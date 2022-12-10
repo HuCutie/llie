@@ -9,6 +9,7 @@ import torch.backends.cudnn as cudnn
 from PIL import Image
 from torch.autograd import Variable
 from model import Finetunemodel
+from tqdm import tqdm
 
 from multi_read_data import MemoryFriendlyLoader
 
@@ -49,14 +50,16 @@ def main():
 
     model.eval()
     with torch.no_grad():
-        for _, (input, image_name) in enumerate(test_queue):
+        loop = tqdm(enumerate(test_queue), total =len(test_queue))
+        for _, (input, image_name) in loop:
             input = Variable(input).cuda()
             image_name = image_name[0].split('/')[-1].split('.')[0]
             i, r = model(input)
             u_name = '%s.png' % (image_name)
-            print('processing {}'.format(u_name))
+            # print('processing {}'.format(u_name))
             u_path = save_path + '/' + u_name
             save_images(r, u_path)
+            loop.set_description('Test ')
 
 
 
